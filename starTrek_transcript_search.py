@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import json
 import textwrap
 import argparse
@@ -34,6 +36,7 @@ def updateIndex( ix, transcript_json_file ):
   writer = ix.writer()
 
   with open(transcript_json_file,'r') as f:
+    print('parsing '+ transcript_json_file)
     transcript=json.load(f)
 
     for series,ts in transcript.items():
@@ -46,7 +49,7 @@ def updateIndex( ix, transcript_json_file ):
                                 character = character,
                                 quote = wrapper.fill(text=quote))
 
-  print('')
+  print(' '*11, end="\r")
   writer.commit()
 
 def hf(res,field):
@@ -68,7 +71,7 @@ if __name__ == '__main__':
                       Query syntax: https://whoosh.readthedocs.io/en/latest/querylang.html \
                       e.g. series:tos character:khan captain')
   parser.add_argument('-u', action="store_true", help='update the index')
-  parser.add_argument('-c', action="store", help='path to db', default = scriptPath+'/StarTrekDialogue.json')
+  parser.add_argument('-j', action="store", help='path to jason db', default = scriptPath+'/StarTrekDialogue_v2.json')
   parser.add_argument('-i', action="store", help='path to index', default = scriptPath+'/index')
   parser.add_argument('-n', action="store", help='maximal number of printed results (default=20)', default = 20)
 
@@ -87,7 +90,7 @@ if __name__ == '__main__':
       if not os.path.exists(args.i):
           os.mkdir(args.i)
       ix = create_in(args.i, schema)
-      updateIndex(ix, args.c)
+      updateIndex(ix, args.j)
   else:
       ix = open_dir(args.i)
 
@@ -109,8 +112,8 @@ if __name__ == '__main__':
       results.formatter = EscapeSeqFormatter()
 
       print('-'*60)
-      print( 'found \x1b[37;1m%u\x1b[37;0m matching entries for query:\x1b[92;2m %s\x1b[0m\n' % ( len(results), args.q ) )
+      print( 'found \x1b[0;1m%u\x1b[0;0m matching entries for query:\x1b[92;2m %s\x1b[0m\n' % ( len(results), args.q ) )
       for i,res in enumerate( results, start = 1) :
-          print( '\x1b[37;1m(%u) \x1b[94;22m%s \x1b[0m%s \x1b[92;22m%s\x1b[0m:' % ( i, hf(res,"series"), hf(res,"episode"), hf(res,"character") ))
+          print( '\x1b[0;1m(%u) \x1b[94;22m%s \x1b[0m%s \x1b[92;22m%s\x1b[0m:' % ( i, hf(res,"series"), hf(res,"episode"), hf(res,"character") ))
           print( '\t%s\x1b[0m\x1b[0m' % (hf(res,"quote")))
           print('\x1b[0m')
