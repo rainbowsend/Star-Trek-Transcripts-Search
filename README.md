@@ -3,5 +3,6 @@ Enables the search of the fields series, episode, character, and quote in the st
 
 Before you can search the database you need to create the serach index via `start_trek_search.py -u`. This command must be called everytime the database is updated.
 
-The query `python startTrek_transcript_search.py -q 'series:TOS, character:khan` provides the following output.
+The query `python startTrek_transcript_search.py -q 'series:TOS, character:khan captain` provides the following output:
+
 ![](https://github.com/rainbowsend/Star-Trek-Transcripts-Search/blob/main/search_output_example.png)
